@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 import os
 import discord
 import asyncio
+import ffmpeg
 
 import csvKorona
 from mutagen.mp3 import MP3
@@ -11,36 +12,62 @@ from mutagen.mp3 import MP3
 load_dotenv()
 TOKEN = os.getenv("DISCORD_TOKEN")
 
-bot = Bot(command_prefix='~')
+bot = Bot(command_prefix=':')
 
+
+@bot.event
+async def on_ready():
+	print("Zalaufu sm se! " + bot.user.name)
 
 @bot.command(pass_context=True)
 async def okuzeni(ctx):
-    msg = csvKorona.GetCases()
-    await ctx.send(msg)
+	msg = csvKorona.GetCases()
+	await ctx.send(msg)
 
 
 @bot.command(pass_context=True)
 async def cigaret(ctx):
-    await predvajajZvok("faracajg", ctx)
+	await predvajajZvok("faracajg", ctx)
 
 
 @bot.command(pass_context=True)
 async def mackurina(ctx):
-    await predvajajZvok("mackurina", ctx)
+	await predvajajZvok("mackurina", ctx)
 
 
 async def predvajajZvok(source, ctx):
-    connected = ctx.author.voice
-    if connected:
-        voice_player = await connected.channel.connect()
-        voice_player.play(discord.FFmpegPCMAudio(executable="exes\\ffmpeg.exe", source="mp3\\" + source + ".mp3",
-                                                 options="-loglevel panic"))
-
-        server = ctx.message.guild.voice_client
-
-        audio = MP3("mp3\\" + source + ".mp3")
-        await asyncio.sleep(int(audio.info.length))
-        await server.disconnect()
+	source = "./mp3/" + source + ".mp3"
+	user = ctx.message.author
+	voice_channel = user.voice.channel
+	channel = None	
+	
+	if voice_channel != None:
+		# User voice channel
+		channel = voice_channel.name
+		
+		# create StreamPlayer
+		vc = await voice_channel.connect()
+		# player = vc.create_ffmpeg_player(source, after=lambda: print('done'))
+		# vc.play(discord.FFmpegPCMAudio(executable="ffmpeg.exe", source=source), after=lambda e: print('done', e))
+		vc.play(discord.FFmpegPCMAudio(source), after=lambda e: print('done', e))
+		
+		audio = MP3(source)
+		await asyncio.sleep(int(audio.info.length))
+		await vc.disconnect()
+	else:
+		await client.say('User is not in a channel.')
 
 bot.run(TOKEN)
+
+
+
+
+
+
+
+
+
+
+
+
+
