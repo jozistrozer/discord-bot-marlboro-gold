@@ -47,15 +47,12 @@ async def predvajajZvok(source, ctx):
 		
 		# create StreamPlayer
 		vc = await voice_channel.connect()
-		# player = vc.create_ffmpeg_player(source, after=lambda: print('done'))
-		# vc.play(discord.FFmpegPCMAudio(executable="ffmpeg.exe", source=source), after=lambda e: print('done', e))
+
 		vc.play(discord.FFmpegPCMAudio(source), after=lambda e: print('done', e))
 		
 		audio = MP3(source)
 		await asyncio.sleep(int(audio.info.length))
 		await vc.disconnect()
-	else:
-		await client.say('User is not in a channel.')
 
 bot.run(TOKEN)
 
