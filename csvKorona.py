@@ -19,8 +19,8 @@ with closing(requests.get(url, stream=True)) as r:
     for row in reader:
         vrstica = [row[rowDatum], row[rowOkuzeni]]
         csvArray.append(vrstica)
-
-
+        
+        
 def GetCases():
     datetime_obj = datetime.datetime.strptime(csvArray[-2][0], "%Y-%m-%d")
     weekDay = langDay.GetWeekDay(datetime_obj.strftime("%A"))
