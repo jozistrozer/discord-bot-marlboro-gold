@@ -14,13 +14,14 @@ bot.remove_command("help")
 
 @bot.event
 async def on_ready():
-	print("Zalaufu sm se!:" + bot.user.name)
+	print("Zalaufu sm se!: " + bot.user.name)
 
 
 @bot.event
 async def on_command_error(ctx, error):
-	await ctx.send("Komanda `" + ctx.message.content + "` ne obstaja. Uporabi `:pomoc` ali `:help`.")
-	await ctx.message.add_reaction("⁉️") 
+	await ctx.send("Ukaz `" + ctx.message.content + "` ne obstaja. Uporabi `:pomoc` ali `:help`.")
+	await ctx.message.add_reaction("⁉️")
+
 
 # OKUZENI
 @bot.command(pass_context=True)
@@ -45,7 +46,14 @@ async def mackurina(ctx):
 @bot.command(pass_context=True)
 async def murja(ctx):
 	await predvajajZvok("murja", ctx)
-	
+
+
+# POZABI
+@bot.command(pass_context=True, aliases=['ausbahforzingis'])
+async def pozabi(ctx):
+	await predvajajZvok("pozabi", ctx)
+
+
 # Pomoc
 @bot.command(pass_context=True, aliases=['help'])
 async def pomoc(ctx):
@@ -58,26 +66,22 @@ async def getHelp(ctx):
 	> **KOMANDE**\n
 **Predvajanje zvokov** 🔊
 ```:murja
-:mackurina```
+:mackurina
+:pozabi, :ausbahforzingis```
 **Covid-19** 😷
 ```:okuzeni``` 
 """
 	await ctx.message.add_reaction("✅")
 	await ctx.message.add_reaction("🚬")
 	await ctx.send(msg)
-
 	
 
 async def predvajajZvok(source, ctx):
 	source = "./mp3/" + source + ".mp3"
 	user = ctx.message.author
 	voice_channel = user.voice.channel
-	channel = None	
-	
-	if voice_channel != None:
-		# User voice channel
-		channel = voice_channel.name
-		
+
+	if voice_channel is not None:
 		# create StreamPlayer
 		vc = await voice_channel.connect()
 
@@ -86,18 +90,7 @@ async def predvajajZvok(source, ctx):
 		audio = MP3(source)
 		await asyncio.sleep(int(audio.info.length))
 		await vc.disconnect()
+	else:
+		await ctx.send("Nisi povezan na noben kanal. Povež se v en kanal in probi še enkrat")
 
 bot.run(TOKEN)
-
-
-
-
-
-
-
-
-
-
-
-
-
