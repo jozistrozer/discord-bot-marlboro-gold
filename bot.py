@@ -54,6 +54,12 @@ async def pozabi(ctx):
 	await predvajajZvok("pozabi", ctx)
 
 
+# JOZEF
+@bot.command(pass_context=True)
+async def jozef(ctx):
+	await predvajajZvok("jozef", ctx)
+
+
 # Pomoc
 @bot.command(pass_context=True, aliases=['help'])
 async def pomoc(ctx):
@@ -67,7 +73,8 @@ async def getHelp(ctx):
 **Predvajanje zvokov** 🔊
 ```:murja
 :mackurina
-:pozabi, :ausbahforzingis```
+:pozabi, :ausbahforzingis
+:jozef```
 **Covid-19** 😷
 ```:okuzeni``` 
 """
