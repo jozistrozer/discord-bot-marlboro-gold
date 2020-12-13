@@ -1,6 +1,0 @@
-git+https://github.com/jozistrozer/discord-bot-marlboro-gold
-PyNaCl==1.3.0
-dotenv
-asyncio
-dnspython
-mutagen
